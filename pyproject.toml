@@ -5,7 +5,8 @@ description = "An MLOps project for productionizing models"
 authors = [{name = "Nidhi Tank", email = "ntank2024@gmail.com"}]
 
 [tool.setuptools]
-packages = {find = {}}
+package-dir = {"" = "src"}
+packages = {find = {where = ["src"]}}
 
 [tool.setuptools.dynamic]
 dependencies = {file = "requirements.txt"}
