@@ -1,92 +1,408 @@
-## MLOps Project - Vehicle Insurance Data Pipeline
-Welcome to this MLOps project, designed to demonstrate a robust pipeline for managing vehicle insurance data. This project aims to impress recruiters and visitors by showcasing the various tools, techniques, services, and features that go into building and deploying a machine learning pipeline for real-world data management. Follow along to learn about project setup, data processing, model deployment, and CI/CD automation!
+# 🚗 Vehicle Insurance Prediction MLOps Pipeline
 
-📁 Project Setup and Structure
-Step 1: Project Template
-Start by executing the template.py file to create the initial project template, which includes the required folder structure and placeholder files.
-Step 2: Package Management
-Write the setup for importing local packages in setup.py and pyproject.toml files.
-Tip: Learn more about these files from crashcourse.txt.
-Step 3: Virtual Environment and Dependencies
-Create a virtual environment and install required dependencies from requirements.txt:
+An end-to-end Machine Learning Operations (MLOps) project for Vehicle Insurance Prediction, demonstrating the complete lifecycle of a production-ready ML system—from data ingestion and validation to model training, deployment, and CI/CD automation using AWS and Docker.
+
+This project showcases industry-standard MLOps practices including MongoDB integration, modular pipeline architecture, model versioning, cloud deployment, and automated CI/CD workflows.
+
+---
+
+## 📌 Project Overview
+
+The objective of this project is to build a scalable and production-ready machine learning pipeline that predicts whether a customer is likely to purchase vehicle insurance based on demographic and vehicle-related attributes.
+
+The project follows a complete MLOps workflow:
+
+```text
+Data Ingestion
+      ↓
+Data Validation
+      ↓
+Data Transformation
+      ↓
+Model Training
+      ↓
+Model Evaluation
+      ↓
+Model Deployment
+      ↓
+Prediction API
+      ↓
+CI/CD Automation
+```
+
+---
+
+## 🚀 Features
+
+* End-to-End MLOps Pipeline
+* MongoDB Atlas Integration
+* Automated Data Validation
+* Feature Engineering & Transformation
+* Machine Learning Model Training
+* Model Evaluation & Versioning
+* AWS S3 Model Storage
+* FastAPI Prediction Service
+* Docker Containerization
+* GitHub Actions CI/CD Pipeline
+* AWS EC2 Deployment
+* Modular and Scalable Architecture
+* Logging and Exception Handling
+
+---
+
+## 🛠️ Tech Stack
+
+### Programming
+
+* Python 3.10
+
+### Machine Learning
+
+* Scikit-Learn
+* Pandas
+* NumPy
+
+### Database
+
+* MongoDB Atlas
+
+### Backend
+
+* FastAPI
+
+### Cloud Services
+
+* AWS S3
+* AWS EC2
+* AWS ECR
+* IAM
+
+### DevOps
+
+* Docker
+* GitHub Actions
+
+### Utilities
+
+* Logging
+* YAML Configuration
+* Custom Exception Handling
+
+---
+
+## 📂 Project Structure
+
+```bash
+Vehicle-Insurance-MLops/
+│
+├── notebook/
+│   ├── EDA.ipynb
+│   ├── Feature_Engineering.ipynb
+│   └── mongoDB_demo.ipynb
+│
+├── src/
+│   ├── components/
+│   │   ├── data_ingestion.py
+│   │   ├── data_validation.py
+│   │   ├── data_transformation.py
+│   │   ├── model_trainer.py
+│   │   ├── model_evaluation.py
+│   │   └── model_pusher.py
+│   │
+│   ├── configuration/
+│   ├── entity/
+│   ├── utils/
+│   ├── aws_storage/
+│   └── pipeline/
+│
+├── templates/
+├── static/
+├── logs/
+├── app.py
+├── requirements.txt
+├── setup.py
+├── pyproject.toml
+├── Dockerfile
+└── .github/workflows/
+```
+
+---
+
+## ⚙️ Installation
+
+### Clone Repository
+
+```bash
+git clone https://github.com/your-username/vehicle-insurance-mlops.git
+
+cd vehicle-insurance-mlops
+```
+
+### Create Virtual Environment
+
+```bash
 conda create -n vehicle python=3.10 -y
+
 conda activate vehicle
+```
+
+### Install Dependencies
+
+```bash
 pip install -r requirements.txt
-Verify the local packages by running:
+```
+
+Verify installation:
+
+```bash
 pip list
-📊 MongoDB Setup and Data Management
-Step 4: MongoDB Atlas Configuration
-Sign up for MongoDB Atlas and create a new project.
-Set up a free M0 cluster, configure the username and password, and allow access from any IP address (0.0.0.0/0).
-Retrieve the MongoDB connection string for Python and save it (replace <password> with your password).
-Step 5: Pushing Data to MongoDB
-Create a folder named notebook, add the dataset, and create a notebook file mongoDB_demo.ipynb.
-Use the notebook to push data to the MongoDB database.
-Verify the data in MongoDB Atlas under Database > Browse Collections.
-📝 Logging, Exception Handling, and EDA
-Step 6: Set Up Logging and Exception Handling
-Create logging and exception handling modules. Test them on a demo file demo.py.
-Step 7: Exploratory Data Analysis (EDA) and Feature Engineering
-Analyze and engineer features in the EDA and Feature Engg notebook for further processing in the pipeline.
-📥 Data Ingestion
-Step 8: Data Ingestion Pipeline
-Define MongoDB connection functions in configuration.mongo_db_connections.py.
-Develop data ingestion components in the data_access and components.data_ingestion.py files to fetch and transform data.
-Update entity/config_entity.py and entity/artifact_entity.py with relevant ingestion configurations.
-Run demo.py after setting up MongoDB connection as an environment variable.
-Setting Environment Variables
-Set MongoDB URL:
-# For Bash
-export MONGODB_URL="mongodb+srv://<username>:<password>...."
-# For Powershell
-$env:MONGODB_URL = "mongodb+srv://<username>:<password>...."
-Note: On Windows, you can also set environment variables through the system settings.
-🔍 Data Validation, Transformation & Model Training
-Step 9: Data Validation
-Define schema in config.schema.yaml and implement data validation functions in utils.main_utils.py.
-Step 10: Data Transformation
-Implement data transformation logic in components.data_transformation.py and create estimator.py in the entity folder.
-Step 11: Model Training
-Define and implement model training steps in components.model_trainer.py using code from estimator.py.
-🌐 AWS Setup for Model Evaluation & Deployment
-Step 12: AWS Setup
-Log in to the AWS console, create an IAM user, and grant AdministratorAccess.
+```
 
-Set AWS credentials as environment variables.
+---
 
-# For Bash
-export AWS_ACCESS_KEY_ID="YOUR_AWS_ACCESS_KEY_ID"
-export AWS_SECRET_ACCESS_KEY="YOUR_AWS_SECRET_ACCESS_KEY"
-Configure S3 Bucket and add access keys in constants.__init__.py.
+## 🗄️ MongoDB Setup
 
-Step 13: Model Evaluation and Pushing to S3
-Create an S3 bucket named my-model-mlopsproj in the us-east-1 region.
-Develop code to push/pull models to/from the S3 bucket in src.aws_storage and entity/s3_estimator.py.
-🚀 Model Evaluation, Model Pusher, and Prediction Pipeline
-Step 14: Model Evaluation & Model Pusher
-Implement model evaluation and deployment components.
-Create Prediction Pipeline and set up app.py for API integration.
-Step 15: Static and Template Directory
-Add static and template directories for web UI.
-🔄 CI/CD Setup with Docker, GitHub Actions, and AWS
-Step 16: Docker and GitHub Actions
-Create Dockerfile and .dockerignore.
-Set up GitHub Actions with AWS authentication by creating secrets in GitHub for:
+### Create MongoDB Atlas Cluster
+
+1. Create a MongoDB Atlas account
+2. Create a new project
+3. Create an M0 free cluster
+4. Create database user credentials
+5. Allow network access from:
+
+```text
+0.0.0.0/0
+```
+
+6. Copy the MongoDB connection string
+
+Example:
+
+```text
+mongodb+srv://username:password@cluster.mongodb.net/
+```
+
+---
+
+## 🔑 Environment Variables
+
+### MongoDB
+
+#### Linux/Mac
+
+```bash
+export MONGODB_URL="mongodb+srv://username:password@cluster.mongodb.net/"
+```
+
+#### Windows PowerShell
+
+```powershell
+$env:MONGODB_URL="mongodb+srv://username:password@cluster.mongodb.net/"
+```
+
+---
+
+## 📊 Data Ingestion
+
+The ingestion pipeline fetches data from MongoDB Atlas and stores it locally for further processing.
+
+### Responsibilities
+
+* Establish MongoDB Connection
+* Extract Data
+* Convert to DataFrame
+* Store Raw Dataset
+* Generate Ingestion Artifacts
+
+---
+
+## ✅ Data Validation
+
+Validation checks include:
+
+* Schema Validation
+* Missing Values Detection
+* Data Type Validation
+* Column Consistency Verification
+* Dataset Integrity Checks
+
+Configuration is maintained in:
+
+```text
+config/schema.yaml
+```
+
+---
+
+## 🔄 Data Transformation
+
+Data preprocessing steps:
+
+* Missing Value Handling
+* Feature Encoding
+* Scaling & Normalization
+* Feature Engineering
+* Pipeline Serialization
+
+Artifacts generated:
+
+```text
+preprocessor.pkl
+```
+
+---
+
+## 🤖 Model Training
+
+Machine learning models are trained using transformed data.
+
+### Training Workflow
+
+* Data Splitting
+* Model Training
+* Hyperparameter Evaluation
+* Performance Comparison
+* Best Model Selection
+
+Artifacts generated:
+
+```text
+model.pkl
+```
+
+---
+
+## 📈 Model Evaluation
+
+The trained model is compared with previously deployed models.
+
+Evaluation metrics include:
+
+* Accuracy
+* Precision
+* Recall
+* F1 Score
+
+If performance improves:
+
+✅ New model approved
+
+Otherwise:
+
+❌ Existing production model retained
+
+---
+
+## ☁️ AWS S3 Integration
+
+Trained models are versioned and stored in AWS S3.
+
+### Bucket Structure
+
+```text
+s3://vehicle-insurance-models/
+
+├── model.pkl
+├── preprocessor.pkl
+└── metadata
+```
+
+---
+
+## 🚀 Running the Application
+
+Start the FastAPI server:
+
+```bash
+python app.py
+```
+
+or
+
+```bash
+uvicorn app:app --host 0.0.0.0 --port 5000
+```
+
+Open:
+
+```text
+http://localhost:5000
+```
+
+---
+
+## 🐳 Docker Deployment
+
+### Build Docker Image
+
+```bash
+docker build -t vehicle-insurance-app .
+```
+
+### Run Container
+
+```bash
+docker run -p 5000:5000 vehicle-insurance-app
+```
+
+---
+
+## 🔄 CI/CD Pipeline
+
+GitHub Actions automates:
+
+* Code Build
+* Docker Image Creation
+* Push to AWS ECR
+* Deploy to AWS EC2
+
+### Required GitHub Secrets
+
+```text
 AWS_ACCESS_KEY_ID
+
 AWS_SECRET_ACCESS_KEY
+
 AWS_DEFAULT_REGION
-ECR_REPO
-Step 17: AWS EC2 and ECR
-Set up an EC2 instance for deployment.
-Install Docker on the EC2 machine.
-Connect EC2 as a self-hosted runner on GitHub.
-Step 18: Final Steps
-Open the 5080 port on the EC2 instance.
-Access the deployed app by visiting http://<public_ip>:5080.
-🛠️ Additional Resources
-Crash Course on setup.py and pyproject.toml: See crashcourse.txt for details.
-GitHub Secrets: Manage secrets for secure CI/CD pipelines.
-🎯 Project Workflow Summary
-Data Ingestion ➔ Data Validation ➔ Data Transformation
-Model Training ➔ Model Evaluation ➔ Model Deployment
-CI/CD Automation with GitHub Actions, Docker, AWS EC2, and ECR
+
+ECR_REPOSITORY
+```
+
+---
+
+## ☁️ AWS Deployment Architecture
+
+```text
+GitHub
+   │
+   ▼
+GitHub Actions
+   │
+   ▼
+AWS ECR
+   │
+   ▼
+AWS EC2
+   │
+   ▼
+Docker Container
+   │
+   ▼
+Prediction API
+```
+
+---
+
+## 📚 Learning Outcomes
+
+Through this project, the following MLOps concepts were implemented:
+
+* Data Versioning
+* Pipeline Architecture
+* Model Lifecycle Management
+* Cloud Storage
+* CI/CD Automation
+* Dockerization
+* Production Deployment
+* Monitoring-Ready Design
+* Reproducible Machine Learning Workflows
