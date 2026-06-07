@@ -1,130 +1,129 @@
-# 🚗 Vehicle Insurance Prediction MLOps Pipeline
+# 🚗 Vehicle Insurance Cross-Sell Prediction – End-to-End MLOps Project
 
-An end-to-end Machine Learning Operations (MLOps) project for Vehicle Insurance Prediction, demonstrating the complete lifecycle of a production-ready ML system—from data ingestion and validation to model training, deployment, and CI/CD automation using AWS and Docker.
+## 📌 Overview
 
-This project showcases industry-standard MLOps practices including MongoDB integration, modular pipeline architecture, model versioning, cloud deployment, and automated CI/CD workflows.
+This project implements a complete **MLOps pipeline** for predicting whether existing vehicle insurance customers are interested in purchasing a health insurance policy.
 
----
-
-## 📌 Project Overview
-
-The objective of this project is to build a scalable and production-ready machine learning pipeline that predicts whether a customer is likely to purchase vehicle insurance based on demographic and vehicle-related attributes.
-
-The project follows a complete MLOps workflow:
-
-```text
-Data Ingestion
-      ↓
-Data Validation
-      ↓
-Data Transformation
-      ↓
-Model Training
-      ↓
-Model Evaluation
-      ↓
-Model Deployment
-      ↓
-Prediction API
-      ↓
-CI/CD Automation
-```
+The solution follows industry-standard MLOps practices including **data ingestion from MongoDB Atlas, automated training pipelines, model evaluation, AWS S3 model registry, FastAPI deployment, Docker containerization, and CI/CD automation using GitHub Actions and AWS services.**
 
 ---
 
-## 🚀 Features
+## 🎯 Business Problem
 
-* End-to-End MLOps Pipeline
-* MongoDB Atlas Integration
-* Automated Data Validation
-* Feature Engineering & Transformation
-* Machine Learning Model Training
-* Model Evaluation & Versioning
-* AWS S3 Model Storage
-* FastAPI Prediction Service
+Insurance companies often target existing customers with additional insurance products. This project predicts whether a customer is likely to respond positively to a health insurance offer based on demographic and vehicle-related information.
+
+---
+
+## 🚀 Key Features
+
+* End-to-End Training Pipeline
+* MongoDB Atlas Data Ingestion
+* Schema-Based Data Validation
+* Data Transformation & Feature Engineering
+* Class Imbalance Handling using SMOTEENN
+* Random Forest Model Training
+* Model Evaluation Against Production Model
+* AWS S3 Model Registry
+* FastAPI Prediction Application
 * Docker Containerization
 * GitHub Actions CI/CD Pipeline
-* AWS EC2 Deployment
-* Modular and Scalable Architecture
-* Logging and Exception Handling
+* AWS ECR & EC2 Deployment
+* Structured Logging & Exception Handling
+
+---
+
+## 🏗️ Architecture
+
+```text
+MongoDB Atlas
+      │
+      ▼
+Data Ingestion
+      │
+      ▼
+Data Validation
+      │
+      ▼
+Data Transformation
+      │
+      ▼
+Model Training
+      │
+      ▼
+Model Evaluation
+      │
+      ▼
+AWS S3 Model Registry
+      │
+      ▼
+Prediction Pipeline
+      │
+      ▼
+FastAPI Application
+      │
+      ▼
+Docker
+      │
+      ▼
+AWS ECR
+      │
+      ▼
+AWS EC2
+```
 
 ---
 
 ## 🛠️ Tech Stack
 
-### Programming
-
-* Python 3.10
-
-### Machine Learning
-
-* Scikit-Learn
-* Pandas
-* NumPy
-
-### Database
-
-* MongoDB Atlas
-
-### Backend
-
-* FastAPI
-
-### Cloud Services
-
-* AWS S3
-* AWS EC2
-* AWS ECR
-* IAM
-
-### DevOps
-
-* Docker
-* GitHub Actions
-
-### Utilities
-
-* Logging
-* YAML Configuration
-* Custom Exception Handling
+| Category         | Technologies                   |
+| ---------------- | ------------------------------ |
+| Programming      | Python 3.10                    |
+| Machine Learning | Scikit-Learn, Imbalanced-Learn |
+| Data Processing  | Pandas, NumPy                  |
+| Database         | MongoDB Atlas                  |
+| Backend          | FastAPI, Jinja2                |
+| Cloud            | AWS S3, EC2, ECR, IAM          |
+| DevOps           | Docker, GitHub Actions         |
+| Utilities        | Boto3, Dill, PyYAML            |
 
 ---
 
-## 📂 Project Structure
+## 📂 Project Workflow
 
-```bash
-Vehicle-Insurance-MLops/
-│
-├── notebook/
-│   ├── EDA.ipynb
-│   ├── Feature_Engineering.ipynb
-│   └── mongoDB_demo.ipynb
-│
-├── src/
-│   ├── components/
-│   │   ├── data_ingestion.py
-│   │   ├── data_validation.py
-│   │   ├── data_transformation.py
-│   │   ├── model_trainer.py
-│   │   ├── model_evaluation.py
-│   │   └── model_pusher.py
-│   │
-│   ├── configuration/
-│   ├── entity/
-│   ├── utils/
-│   ├── aws_storage/
-│   └── pipeline/
-│
-├── templates/
-├── static/
-├── logs/
-├── app.py
-├── requirements.txt
-├── setup.py
-├── pyproject.toml
-├── Dockerfile
-└── .github/workflows/
-```
+### 1️⃣ Data Ingestion
+
+* Connects to MongoDB Atlas
+* Extracts insurance data
+* Creates train/test datasets
+
+### 2️⃣ Data Validation
+
+* Schema validation
+* Missing column checks
+* Data consistency verification
+
+### 3️⃣ Data Transformation
+
+* Feature encoding
+* Feature scaling
+* SMOTEENN balancing
+* Preprocessing pipeline creation
+
+### 4️⃣ Model Training
+
+* Random Forest Classifier
+* Performance evaluation
+* Model serialization
+
+### 5️⃣ Model Evaluation
+
+* Compare with production model
+* F1-score based acceptance criteria
+
+### 6️⃣ Model Deployment
+
+* Upload best model to AWS S3
+* Serve predictions through FastAPI
 
 ---
 
@@ -133,16 +132,14 @@ Vehicle-Insurance-MLops/
 ### Clone Repository
 
 ```bash
-git clone https://github.com/your-username/vehicle-insurance-mlops.git
-
-cd vehicle-insurance-mlops
+git clone https://github.com/your-username/Project-01-MLOps.git
+cd Project-01-MLOps
 ```
 
-### Create Virtual Environment
+### Create Environment
 
 ```bash
 conda create -n vehicle python=3.10 -y
-
 conda activate vehicle
 ```
 
@@ -152,178 +149,31 @@ conda activate vehicle
 pip install -r requirements.txt
 ```
 
-Verify installation:
-
-```bash
-pip list
-```
-
----
-
-## 🗄️ MongoDB Setup
-
-### Create MongoDB Atlas Cluster
-
-1. Create a MongoDB Atlas account
-2. Create a new project
-3. Create an M0 free cluster
-4. Create database user credentials
-5. Allow network access from:
-
-```text
-0.0.0.0/0
-```
-
-6. Copy the MongoDB connection string
-
-Example:
-
-```text
-mongodb+srv://username:password@cluster.mongodb.net/
-```
-
 ---
 
 ## 🔑 Environment Variables
 
-### MongoDB
+Create a `.env` file:
 
-#### Linux/Mac
+```env
+MONGODB_URL=your_mongodb_connection_string
 
-```bash
-export MONGODB_URL="mongodb+srv://username:password@cluster.mongodb.net/"
-```
-
-#### Windows PowerShell
-
-```powershell
-$env:MONGODB_URL="mongodb+srv://username:password@cluster.mongodb.net/"
+AWS_ACCESS_KEY_ID=your_access_key
+AWS_SECRET_ACCESS_KEY=your_secret_key
+AWS_DEFAULT_REGION=us-east-1
 ```
 
 ---
 
-## 📊 Data Ingestion
+## 🚀 Run Application
 
-The ingestion pipeline fetches data from MongoDB Atlas and stores it locally for further processing.
-
-### Responsibilities
-
-* Establish MongoDB Connection
-* Extract Data
-* Convert to DataFrame
-* Store Raw Dataset
-* Generate Ingestion Artifacts
-
----
-
-## ✅ Data Validation
-
-Validation checks include:
-
-* Schema Validation
-* Missing Values Detection
-* Data Type Validation
-* Column Consistency Verification
-* Dataset Integrity Checks
-
-Configuration is maintained in:
-
-```text
-config/schema.yaml
-```
-
----
-
-## 🔄 Data Transformation
-
-Data preprocessing steps:
-
-* Missing Value Handling
-* Feature Encoding
-* Scaling & Normalization
-* Feature Engineering
-* Pipeline Serialization
-
-Artifacts generated:
-
-```text
-preprocessor.pkl
-```
-
----
-
-## 🤖 Model Training
-
-Machine learning models are trained using transformed data.
-
-### Training Workflow
-
-* Data Splitting
-* Model Training
-* Hyperparameter Evaluation
-* Performance Comparison
-* Best Model Selection
-
-Artifacts generated:
-
-```text
-model.pkl
-```
-
----
-
-## 📈 Model Evaluation
-
-The trained model is compared with previously deployed models.
-
-Evaluation metrics include:
-
-* Accuracy
-* Precision
-* Recall
-* F1 Score
-
-If performance improves:
-
-✅ New model approved
-
-Otherwise:
-
-❌ Existing production model retained
-
----
-
-## ☁️ AWS S3 Integration
-
-Trained models are versioned and stored in AWS S3.
-
-### Bucket Structure
-
-```text
-s3://vehicle-insurance-models/
-
-├── model.pkl
-├── preprocessor.pkl
-└── metadata
-```
-
----
-
-## 🚀 Running the Application
-
-Start the FastAPI server:
+### Start FastAPI Server
 
 ```bash
 python app.py
 ```
 
-or
-
-```bash
-uvicorn app:app --host 0.0.0.0 --port 5000
-```
-
-Open:
+Application URL:
 
 ```text
 http://localhost:5000
@@ -331,78 +181,75 @@ http://localhost:5000
 
 ---
 
-## 🐳 Docker Deployment
+## 🐳 Docker
 
-### Build Docker Image
+### Build Image
 
 ```bash
-docker build -t vehicle-insurance-app .
+docker build -t vehicle-insurance-mlops .
 ```
 
 ### Run Container
 
 ```bash
-docker run -p 5000:5000 vehicle-insurance-app
+docker run -p 5000:5000 vehicle-insurance-mlops
 ```
 
 ---
 
 ## 🔄 CI/CD Pipeline
 
-GitHub Actions automates:
+Implemented using **GitHub Actions**.
 
-* Code Build
-* Docker Image Creation
-* Push to AWS ECR
-* Deploy to AWS EC2
+### Continuous Integration
 
-### Required GitHub Secrets
+* Checkout Source Code
+* Build Docker Image
+* Push Image to AWS ECR
 
-```text
-AWS_ACCESS_KEY_ID
+### Continuous Deployment
 
-AWS_SECRET_ACCESS_KEY
-
-AWS_DEFAULT_REGION
-
-ECR_REPOSITORY
-```
+* Pull Latest Image on EC2
+* Run Docker Container
+* Deploy Updated Application
 
 ---
 
-## ☁️ AWS Deployment Architecture
+## ☁️ AWS Services Used
 
-```text
-GitHub
-   │
-   ▼
-GitHub Actions
-   │
-   ▼
-AWS ECR
-   │
-   ▼
-AWS EC2
-   │
-   ▼
-Docker Container
-   │
-   ▼
-Prediction API
-```
+* **AWS S3** – Model Registry
+* **AWS ECR** – Docker Image Repository
+* **AWS EC2** – Application Hosting
+* **AWS IAM** – Access Management
 
 ---
 
-## 📚 Learning Outcomes
+## 📊 Dataset Features
 
-Through this project, the following MLOps concepts were implemented:
+* Gender
+* Age
+* Driving License
+* Region Code
+* Previously Insured
+* Vehicle Age
+* Vehicle Damage
+* Annual Premium
+* Policy Sales Channel
+* Vintage
 
-* Data Versioning
-* Pipeline Architecture
-* Model Lifecycle Management
-* Cloud Storage
+**Target Variable:** `Response`
+
+---
+
+## 🎓 Learning Outcomes
+
+This project demonstrates practical experience with:
+
+* MLOps Pipeline Development
+* Machine Learning Model Lifecycle
+* MongoDB Integration
+* AWS Cloud Services
+* Docker Containerization
 * CI/CD Automation
-* Dockerization
-* Production Deployment
-* Monitoring-Ready Design
-* Reproducible Machine Learning Workflows
+* FastAPI Deployment
+* Production-Ready ML Systems
