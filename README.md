@@ -2,9 +2,9 @@
 
 ## 📌 Overview
 
-This project implements a complete **MLOps pipeline** for predicting whether existing vehicle insurance customers are interested in purchasing a health insurance policy.
+This project implements a complete MLOps pipeline for predicting whether existing vehicle insurance customers are interested in purchasing a health insurance policy.
 
-The solution follows industry-standard MLOps practices including **data ingestion from MongoDB Atlas, automated training pipelines, model evaluation, AWS S3 model registry, FastAPI deployment, Docker containerization, and CI/CD automation using GitHub Actions and AWS services.**
+The solution follows industry-standard MLOps practices including data ingestion from MongoDB Atlas, automated training pipelines, model evaluation, AWS S3 model registry, FastAPI deployment, Docker containerization, and CI/CD automation using GitHub Actions and AWS services.
 
 ---
 
@@ -16,25 +16,25 @@ Insurance companies often target existing customers with additional insurance pr
 
 ## 🚀 Key Features
 
-* End-to-End Training Pipeline
-* MongoDB Atlas Data Ingestion
-* Schema-Based Data Validation
-* Data Transformation & Feature Engineering
-* Class Imbalance Handling using SMOTEENN
-* Random Forest Model Training
-* Model Evaluation Against Production Model
-* AWS S3 Model Registry
-* FastAPI Prediction Application
-* Docker Containerization
-* GitHub Actions CI/CD Pipeline
-* AWS ECR & EC2 Deployment
-* Structured Logging & Exception Handling
+- End-to-End Training Pipeline
+- MongoDB Atlas Data Ingestion
+- Schema-Based Data Validation
+- Data Transformation & Feature Engineering
+- Class Imbalance Handling using SMOTEENN
+- Random Forest Model Training
+- Model Evaluation Against Production Model
+- AWS S3 Model Registry
+- FastAPI Prediction Application
+- Docker Containerization
+- GitHub Actions CI/CD Pipeline
+- AWS ECR & EC2 Deployment
+- Structured Logging & Exception Handling
 
 ---
 
 ## 🏗️ Architecture
 
-```text
+```
 MongoDB Atlas
       │
       ▼
@@ -62,29 +62,77 @@ Prediction Pipeline
 FastAPI Application
       │
       ▼
-Docker
-      │
-      ▼
-AWS ECR
-      │
-      ▼
-AWS EC2
+Docker → AWS ECR → AWS EC2
 ```
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Category         | Technologies                   |
-| ---------------- | ------------------------------ |
-| Programming      | Python 3.10                    |
-| Machine Learning | Scikit-Learn, Imbalanced-Learn |
-| Data Processing  | Pandas, NumPy                  |
-| Database         | MongoDB Atlas                  |
-| Backend          | FastAPI, Jinja2                |
-| Cloud            | AWS S3, EC2, ECR, IAM          |
-| DevOps           | Docker, GitHub Actions         |
-| Utilities        | Boto3, Dill, PyYAML            |
+| Category | Technologies |
+|---|---|
+| Programming | Python 3.10 |
+| Machine Learning | Scikit-Learn, Imbalanced-Learn (SMOTEENN) |
+| Data Processing | Pandas, NumPy |
+| Serialization | Dill |
+| Database | MongoDB Atlas (PyMongo, Certifi) |
+| Backend | FastAPI, Uvicorn, Jinja2 |
+| Cloud | AWS S3, EC2, ECR, IAM (Boto3) |
+| DevOps | Docker, GitHub Actions |
+| Configuration | PyYAML, python-dotenv |
+
+---
+
+## 📂 Project Structure
+
+```
+Project-01-MLOps/
+│
+├── .github/
+│   └── workflows/
+│       └── aws.yaml                  # CI/CD pipeline
+│
+├── config/
+│   ├── schema.yaml                   # Data schema for validation
+│   └── model.yaml                    # Model hyperparameters
+│
+├── notebook/
+│   ├── exp-notebook.ipynb            # EDA & experimentation
+│   └── mongoDB_demo.ipynb            # MongoDB connection demo
+│
+├── src/
+│   ├── cloud_storage/                # AWS S3 utilities
+│   ├── components/
+│   │   ├── data_ingestion.py         # Stage 1: MongoDB → CSV
+│   │   ├── data_validation.py        # Stage 2: Schema validation
+│   │   ├── data_transformation.py    # Stage 3: Encoding + Scaling + SMOTEENN
+│   │   ├── model_trainer.py          # Stage 4: RandomForest training
+│   │   ├── model_evaluation.py       # Stage 5: F1 comparison vs production
+│   │   └── model_pusher.py           # Stage 6: Push to S3
+│   ├── configuration/                # MongoDB connection manager
+│   ├── constants/                    # App-wide constants
+│   ├── data_access/                  # MongoDB data access layer
+│   ├── entity/                       # Config & artifact dataclasses
+│   ├── exception/                    # Custom exception handling
+│   ├── logger/                       # Structured logging
+│   ├── pipline/
+│   │   ├── training_pipeline.py      # Orchestrates all 6 stages
+│   │   └── prediction_pipeline.py    # Real-time prediction from S3
+│   └── utils/                        # I/O helpers (save/load, YAML)
+│
+├── static/                           # CSS for web UI
+├── templates/                        # Jinja2 HTML templates
+├── tests/                            # Unit tests
+├── artifact/                         # Auto-generated pipeline artifacts
+├── logs/                             # Auto-generated log files
+│
+├── app.py                            # FastAPI entry point
+├── Dockerfile                        # Container definition
+├── requirements.txt                  # Python dependencies
+├── setup.py                          # Editable package setup
+├── pyproject.toml                    # Build system config
+└── LICENSE                           # MIT License
+```
 
 ---
 
@@ -92,38 +140,45 @@ AWS EC2
 
 ### 1️⃣ Data Ingestion
 
-* Connects to MongoDB Atlas
-* Extracts insurance data
-* Creates train/test datasets
+- Connects to MongoDB Atlas via PyMongo
+- Extracts insurance data as a Pandas DataFrame
+- Splits into train/test datasets
+- Saves as CSV to the local `artifact/` directory
 
 ### 2️⃣ Data Validation
 
-* Schema validation
-* Missing column checks
-* Data consistency verification
+- Validates column count against `config/schema.yaml`
+- Checks existence of all required numerical and categorical columns
+- Saves JSON validation report
+- Pipeline halts if validation fails
 
 ### 3️⃣ Data Transformation
 
-* Feature encoding
-* Feature scaling
-* SMOTEENN balancing
-* Preprocessing pipeline creation
+- Gender encoding (`Female → 0`, `Male → 1`)
+- One-hot encoding for `Vehicle_Age` and `Vehicle_Damage`
+- Column renaming to sanitize special characters
+- StandardScaler on `Age`, `Vintage`
+- MinMaxScaler on `Annual_Premium`
+- SMOTEENN for class imbalance handling
+- Preprocessor pipeline serialized via Dill
 
 ### 4️⃣ Model Training
 
-* Random Forest Classifier
-* Performance evaluation
-* Model serialization
+- Trains a Random Forest Classifier with fixed hyperparameters
+- Evaluates: Accuracy, F1 Score, Precision, Recall
+- Rejects model if accuracy falls below configured threshold
+- Bundles preprocessor + model into a single `MyModel` object
 
 ### 5️⃣ Model Evaluation
 
-* Compare with production model
-* F1-score based acceptance criteria
+- Downloads current production model from AWS S3
+- Computes F1 Score for both models on the same test data
+- New model accepted only if `F1(new) > F1(production)`
 
 ### 6️⃣ Model Deployment
 
-* Upload best model to AWS S3
-* Serve predictions through FastAPI
+- Uploads accepted model to AWS S3 as the new production baseline
+- Serves real-time predictions through FastAPI
 
 ---
 
@@ -153,7 +208,7 @@ pip install -r requirements.txt
 
 ## 🔑 Environment Variables
 
-Create a `.env` file:
+Create a `.env` file in the project root:
 
 ```env
 MONGODB_URL=your_mongodb_connection_string
@@ -175,9 +230,35 @@ python app.py
 
 Application URL:
 
-```text
+```
 http://localhost:5000
 ```
+
+### API Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/` | Renders the vehicle data prediction form |
+| `POST` | `/` | Accepts form data, returns prediction (`Response-Yes` / `Response-No`) |
+| `GET` | `/train` | Triggers the full training pipeline |
+
+---
+
+## 📊 Dataset Features
+
+| Feature | Type | Description |
+|---|---|---|
+| `Gender` | Categorical | Gender of the customer (Male / Female) |
+| `Age` | Integer | Age of the customer |
+| `Driving_License` | Binary (0/1) | Whether the customer has a driving license |
+| `Region_Code` | Float | Unique code for the customer's region |
+| `Previously_Insured` | Binary (0/1) | Whether the customer already has vehicle insurance |
+| `Vehicle_Age` | Categorical | Age of the vehicle (< 1yr, 1–2yr, > 2yr) |
+| `Vehicle_Damage` | Categorical | Whether the vehicle was previously damaged (Yes / No) |
+| `Annual_Premium` | Float | Annual premium amount (₹) |
+| `Policy_Sales_Channel` | Float | Channel code used to reach the customer |
+| `Vintage` | Integer | Days the customer has been with the company |
+| **`Response`** | **Binary (0/1)** | **Target — Interested in health insurance?** |
 
 ---
 
@@ -192,52 +273,55 @@ docker build -t vehicle-insurance-mlops .
 ### Run Container
 
 ```bash
-docker run -p 5000:5000 vehicle-insurance-mlops
+docker run -d -p 5000:5000 \
+  -e AWS_ACCESS_KEY_ID="your_access_key" \
+  -e AWS_SECRET_ACCESS_KEY="your_secret_key" \
+  -e AWS_DEFAULT_REGION="us-east-1" \
+  -e MONGODB_URL="your_mongodb_connection_string" \
+  vehicle-insurance-mlops
 ```
+
+> ⚠️ Environment variables are **required** — the container will fail without them.
 
 ---
 
 ## 🔄 CI/CD Pipeline
 
-Implemented using **GitHub Actions**.
+Implemented using GitHub Actions — triggers on every push to `main`.
 
 ### Continuous Integration
 
-* Checkout Source Code
-* Build Docker Image
-* Push Image to AWS ECR
+- Checkout source code
+- Configure AWS credentials
+- Build Docker image
+- Push image to AWS ECR
 
 ### Continuous Deployment
 
-* Pull Latest Image on EC2
-* Run Docker Container
-* Deploy Updated Application
+- Pull latest image from ECR on EC2 (self-hosted runner)
+- Run Docker container with environment variables
+- Application live on port 5000
+
+### Required GitHub Secrets
+
+| Secret | Description |
+|---|---|
+| `AWS_ACCESS_KEY_ID` | IAM user access key |
+| `AWS_SECRET_ACCESS_KEY` | IAM user secret key |
+| `AWS_DEFAULT_REGION` | AWS region (e.g., `us-east-1`) |
+| `ECR_REPO` | Amazon ECR repository name |
+| `MONGODB_URL` | MongoDB Atlas connection string |
 
 ---
 
 ## ☁️ AWS Services Used
 
-* **AWS S3** – Model Registry
-* **AWS ECR** – Docker Image Repository
-* **AWS EC2** – Application Hosting
-* **AWS IAM** – Access Management
-
----
-
-## 📊 Dataset Features
-
-* Gender
-* Age
-* Driving License
-* Region Code
-* Previously Insured
-* Vehicle Age
-* Vehicle Damage
-* Annual Premium
-* Policy Sales Channel
-* Vintage
-
-**Target Variable:** `Response`
+| Service | Purpose |
+|---|---|
+| AWS S3 | Model registry (stores production model) |
+| AWS ECR | Docker image repository |
+| AWS EC2 | Application hosting (self-hosted runner) |
+| AWS IAM | Access management |
 
 ---
 
@@ -245,11 +329,24 @@ Implemented using **GitHub Actions**.
 
 This project demonstrates practical experience with:
 
-* MLOps Pipeline Development
-* Machine Learning Model Lifecycle
-* MongoDB Integration
-* AWS Cloud Services
-* Docker Containerization
-* CI/CD Automation
-* FastAPI Deployment
-* Production-Ready ML Systems
+- MLOps Pipeline Development
+- Machine Learning Model Lifecycle
+- MongoDB Integration
+- AWS Cloud Services (S3, ECR, EC2)
+- Docker Containerization
+- CI/CD Automation with GitHub Actions
+- FastAPI Deployment
+- Production-Ready ML Systems
+
+---
+
+## 👩‍💻 Author
+
+**Nidhi Tank**
+📧 ntank2024@gmail.com
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
