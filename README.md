@@ -94,7 +94,6 @@ Project-01-MLOps/
 │
 ├── config/
 │   ├── schema.yaml                   # Data schema for validation
-│   └── model.yaml                    # Model hyperparameters
 │
 ├── notebook/
 │   ├── exp-notebook.ipynb            # EDA & experimentation
@@ -337,16 +336,3 @@ This project demonstrates practical experience with:
 - CI/CD Automation with GitHub Actions
 - FastAPI Deployment
 - Production-Ready ML Systems
-
----
-
-## 👩‍💻 Author
-
-**Nidhi Tank**
-📧 ntank2024@gmail.com
-
----
-
-## 📄 License
-
-This project is licensed under the [MIT License](LICENSE).
