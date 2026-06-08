@@ -2,7 +2,7 @@
 
 ## 📌 Overview
 
-This project implements a complete MLOps pipeline for predicting whether existing vehicle insurance customers are interested in purchasing a health insurance policy.
+This project implements a complete MLOps pipeline for predicting whether existing health insurance customers are interested in purchasing a vehicle insurance policy.
 
 The solution follows industry-standard MLOps practices including data ingestion from MongoDB Atlas, automated training pipelines, model evaluation, AWS S3 model registry, FastAPI deployment, Docker containerization, and CI/CD automation using GitHub Actions and AWS services.
 
@@ -10,7 +10,7 @@ The solution follows industry-standard MLOps practices including data ingestion 
 
 ## 🎯 Business Problem
 
-Insurance companies often target existing customers with additional insurance products. This project predicts whether a customer is likely to respond positively to a health insurance offer based on demographic and vehicle-related information.
+Insurance companies often target existing customers with additional insurance products. This project predicts whether an existing health insurance customer is likely to respond positively to a vehicle insurance offer based on demographic and vehicle-related information (such as vehicle age and past damage history).
 
 ---
 
@@ -257,7 +257,7 @@ http://localhost:5000
 | `Annual_Premium` | Float | Annual premium amount (₹) |
 | `Policy_Sales_Channel` | Float | Channel code used to reach the customer |
 | `Vintage` | Integer | Days the customer has been with the company |
-| **`Response`** | **Binary (0/1)** | **Target — Interested in health insurance?** |
+| **`Response`** | **Binary (0/1)** | **Target — Interested in vehicle insurance?** |
 
 ---
 
