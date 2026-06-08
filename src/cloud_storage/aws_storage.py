@@ -91,7 +91,7 @@ class SimpleStorageService:
 
     def get_file_object(self, filename: str, bucket_name: str) -> object:
         """
-        Retrieves the file object(s) from the specified bucket based on the filename.
+        Retrieves the file object from the specified bucket based on the filename.
 
         Args:
             filename (str): The name of the file to retrieve.
@@ -100,22 +100,38 @@ class SimpleStorageService:
         Returns:
             object: The S3 file object matching the filename exactly.
         """
-        logging.info("Entered the get_file_object method of SimpleStorageService class")
+        logging.info(f"Entered the get_file_object method of SimpleStorageService class. Bucket: {bucket_name}, Path: {filename}")
         try:
             bucket = self.get_bucket(bucket_name)
+            
+            # Fetch all prefix matches
             file_objects = [file_object for file_object in bucket.objects.filter(Prefix=filename)]
-            file_obj = next(
-                (file_object for file_object in file_objects if file_object.key == filename),
-                None,
-            )
-            if file_obj is None:
+            found_keys = [f.key for f in file_objects]
+            
+            logging.info(f"S3 lookup results - Bucket: '{bucket_name}', Requested: '{filename}', Found keys: {found_keys}")
+            
+            # Filter for exact matches
+            exact_matches = [f for f in file_objects if f.key == filename]
+            
+            if len(exact_matches) == 0:
                 raise FileNotFoundError(
                     f"S3 object '{filename}' was not found in bucket '{bucket_name}'. "
+                    f"Keys searched: {found_keys}. "
                     "Run the training pipeline to create and upload the model first."
                 )
-            logging.info("Exited the get_file_object method of SimpleStorageService class")
+                
+            if len(exact_matches) > 1:
+                raise ValueError(
+                    f"Multiple exact matches ({len(exact_matches)}) found for key '{filename}' in bucket '{bucket_name}'."
+                )
+                
+            file_obj = exact_matches[0]
+            logging.info(f"Final selected S3 object key: '{file_obj.key}'")
+            
             if hasattr(file_obj, "Object"):
                 file_obj = file_obj.Object()
+                
+            logging.info("Exited the get_file_object method of SimpleStorageService class successfully")
             return file_obj
         except Exception as e:
             raise MyException(e, sys) from e
