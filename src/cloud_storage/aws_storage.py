@@ -1,7 +1,7 @@
 import boto3
 from src.configuration.aws_connection import S3Client
 from io import StringIO
-from typing import Union,List
+from typing import Union
 import os,sys
 from src.logger import logging
 from mypy_boto3_s3.service_resource import Bucket
@@ -89,7 +89,7 @@ class SimpleStorageService:
         except Exception as e:
             raise MyException(e, sys) from e
 
-    def get_file_object(self, filename: str, bucket_name: str) -> Union[List[object], object]:
+    def get_file_object(self, filename: str, bucket_name: str) -> object:
         """
         Retrieves the file object(s) from the specified bucket based on the filename.
 
@@ -98,16 +98,23 @@ class SimpleStorageService:
             bucket_name (str): The name of the S3 bucket.
 
         Returns:
-            Union[List[object], object]: The S3 file object or list of file objects.
+            object: The S3 file object matching the filename exactly.
         """
         logging.info("Entered the get_file_object method of SimpleStorageService class")
         try:
             bucket = self.get_bucket(bucket_name)
             file_objects = [file_object for file_object in bucket.objects.filter(Prefix=filename)]
-            func = lambda x: x[0] if len(x) == 1 else x
-            file_objs = func(file_objects)
+            file_obj = next(
+                (file_object for file_object in file_objects if file_object.key == filename),
+                None,
+            )
+            if file_obj is None:
+                raise FileNotFoundError(
+                    f"S3 object '{filename}' was not found in bucket '{bucket_name}'. "
+                    "Run the training pipeline to create and upload the model first."
+                )
             logging.info("Exited the get_file_object method of SimpleStorageService class")
-            return file_objs
+            return file_obj
         except Exception as e:
             raise MyException(e, sys) from e
 
