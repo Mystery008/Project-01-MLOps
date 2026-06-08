@@ -114,6 +114,8 @@ class SimpleStorageService:
                     "Run the training pipeline to create and upload the model first."
                 )
             logging.info("Exited the get_file_object method of SimpleStorageService class")
+            if hasattr(file_obj, "Object"):
+                file_obj = file_obj.Object()
             return file_obj
         except Exception as e:
             raise MyException(e, sys) from e
