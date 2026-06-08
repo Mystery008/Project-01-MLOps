@@ -1,4 +1,4 @@
-# 🚗 Vehicle Insurance Cross-Sell Prediction – End-to-End MLOps Project
+# 🚗 Vehicle Insurance Prediction – End-to-End MLOps Project
 
 ## 📌 Overview
 
